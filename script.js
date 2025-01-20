@@ -8,7 +8,7 @@ const busSchedule = [
     { time: '11:15', type: 'PRIVATE', status: 'Scheduled' },
     { time: '13:15', type: 'PRIVATE', status: 'Scheduled' },
     { time: '14:20', type: 'CTB', status: 'Scheduled' },
-    { time: '15:25', type: 'PRIVATE', status: 'Scheduled' },
+    { time: '15:10', type: 'PRIVATE', status: 'Scheduled' },
     { time: '16:15', type: 'CTB', status: 'Scheduled' },
     { time: '17:15', type: 'PRIVATE', status: 'Scheduled' }
 ];
