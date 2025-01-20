@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Schedule - Piscal Watta to Kurunegala</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Toastify CSS for notifications -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-indigo-600 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <i class="fas fa-bus text-white text-2xl mr-3"></i>
+                    <h1 class="text-white text-xl font-bold">Bus Schedule</h1>
+                </div>
+                <div id="weatherInfo" class="text-white flex items-center">
+                    <i class="fas fa-sun mr-2"></i>
+                    <span>Loading weather...</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Clock and Date Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="far fa-clock mr-2"></i>
+                        <span id="clock"></span>
+                    </h2>
+                    <p class="text-gray-600" id="date"></p>
+                </div>
+                <div>
+                    <button id="notifyToggle" class="bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-bell mr-2"></i>
+                        Enable Notifications
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-map-marker-alt mr-2"></i>
+                Bus Stop Location
+            </h2>
+            <div id="map" class="h-[400px] rounded-lg"></div>
+        </div>
+
+        <!-- Schedule Section -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-calendar-alt mr-2"></i>
+                Today's Schedule
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <i class="far fa-clock mr-2"></i>Time
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <i class="fas fa-bus mr-2"></i>Service Type
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <i class="fas fa-info-circle mr-2"></i>Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Table content will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+<footer class="bg-gray-800 text-white mt-8">
+    <!-- Main Footer -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- About Section -->
+            <div class="col-span-1">
+                <h3 class="text-xl font-bold mb-4">About</h3>
+                <p class="text-gray-400">
+                    Real-time bus schedule tracking system for Piscal Watta to Kurunegala route.
+                    Making your journey planning easier and more efficient.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-span-1">
+                <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="https://www.google.com/url?q=https%3A%2F%2Fchamudithalanka.github.io%2Fchamuport%2F&sa=D&sntz=1&usg=AOvVaw1_7IOe12XCwA0Ri6ww9utT" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-info-circle mr-2"></i>About Us
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.google.com/url?q=https%3A%2F%2Fchamudithalanka.github.io%2Fappointment%2F&sa=D&sntz=1&usg=AOvVaw3whs3_ikHLD2NXwnDH-RBq" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-envelope mr-2"></i>Contact Us
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-bus mr-2"></i>Services
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-question-circle mr-2"></i>FAQ
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="col-span-1">
+                <h3 class="text-xl font-bold mb-4">Contact Info</h3>
+                <ul class="space-y-2">
+                    <li class="flex items-center text-gray-400">
+                        <i class="fas fa-phone mr-2"></i>
+                        +94 78 113 2477 <br>
+                        +1 (954) 954-6469
+                    </li>
+                    <li class="flex items-center text-gray-400">
+                        <i class="fas fa-envelope mr-2"></i>
+                        info@busschedule.com
+                    </li>
+                    <li class="flex items-center text-gray-400">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        Piscal Watta, Kurunegala
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="col-span-1">
+                <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                <div class="flex space-x-4">
+                    <a href="https://facebook.com" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-facebook fa-2x"></i>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter fa-2x"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-instagram fa-2x"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin fa-2x"></i>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github fa-2x"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright Section -->
+    <div class="bg-gray-900 py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 text-center md:text-left">
+                    © 2025 Developed by <span class="font-bold">Chamudith Lanka</span>. All rights reserved.
+                </div>
+                <div class="mt-2 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors mx-2">Privacy Policy</a>
+                    <span class="text-gray-600">|</span>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors mx-2">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

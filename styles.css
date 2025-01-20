@@ -1,0 +1,11 @@
+/* Custom styles that aren't covered by Tailwind */
+.current {
+    background-color: #4ade80 !important;
+    color: white !important;
+}
+
+/* Toast customization */
+.toastify {
+    background: linear-gradient(135deg, #4f46e5, #818cf8);
+    border-radius: 0.5rem;
+}
